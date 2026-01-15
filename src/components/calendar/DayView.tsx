@@ -6,11 +6,12 @@ import { cn } from '@/lib/utils';
 interface DayViewProps {
   date: Date;
   events: CalendarEvent[];
+  onEventClick?: (event: CalendarEvent) => void;
 }
 
 const hours = Array.from({ length: 24 }, (_, i) => i);
 
-export function DayView({ date, events }: DayViewProps) {
+export function DayView({ date, events, onEventClick }: DayViewProps) {
   // Separate all-day events from timed events
   const allDayEvents = events.filter(e => e.allDay);
   const timedEvents = events.filter(e => !e.allDay);
@@ -34,7 +35,11 @@ export function DayView({ date, events }: DayViewProps) {
           </span>
           <div className="mt-2 space-y-2">
             {allDayEvents.map(event => (
-              <EventTile key={event.id} event={event} />
+              <EventTile 
+                key={event.id} 
+                event={event} 
+                onClick={() => onEventClick?.(event)}
+              />
             ))}
           </div>
         </div>
@@ -65,7 +70,12 @@ export function DayView({ date, events }: DayViewProps) {
               <div className="flex-1 py-1 pr-4 border-l border-border/50">
                 <div className="space-y-1">
                   {hourEvents.map(event => (
-                    <EventTile key={event.id} event={event} compact />
+                    <EventTile 
+                      key={event.id} 
+                      event={event} 
+                      compact 
+                      onClick={() => onEventClick?.(event)}
+                    />
                   ))}
                 </div>
               </div>
