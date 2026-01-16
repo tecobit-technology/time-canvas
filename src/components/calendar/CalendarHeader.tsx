@@ -1,4 +1,4 @@
-import { ChevronLeft, ChevronRight, Search } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Search, ArrowLeft } from 'lucide-react';
 import { format } from 'date-fns';
 import type { ViewType } from '@/types/calendar';
 import { cn } from '@/lib/utils';
@@ -20,7 +20,19 @@ interface CalendarHeaderProps {
   onToday: () => void;
   onSearchClick?: () => void;
   onSettingsClick?: () => void;
+  // Navigation hierarchy props
+  canGoBack?: boolean;
+  onGoBack?: () => void;
+  previousView?: ViewType | null;
 }
+
+// Helper to get view label for back button
+const viewLabels: Record<ViewType, string> = {
+  day: 'Day',
+  week: 'Week',
+  month: 'Month',
+  year: 'Year',
+};
 
 export function CalendarHeader({
   currentDate,
@@ -30,6 +42,9 @@ export function CalendarHeader({
   onToday,
   onSearchClick,
   onSettingsClick,
+  canGoBack = false,
+  onGoBack,
+  previousView,
 }: CalendarHeaderProps) {
   const { mode } = useCalendarMode();
   const bsDate = adToBS(currentDate);
@@ -131,8 +146,32 @@ export function CalendarHeader({
 
   return (
     <header className="flex flex-col px-4 py-3 bg-background safe-top gap-2">
-      {/* Top row: Title and primary actions */}
-      <div className="flex items-center justify-between">
+      {/* Top row: Back button (if hierarchical), Title, and navigation */}
+      <div className="flex items-center justify-between gap-2">
+        {/* Back button - only shown when in child view hierarchy */}
+        {canGoBack && onGoBack ? (
+          <button
+            onClick={onGoBack}
+            className={cn(
+              "flex items-center gap-1 min-w-[48px] min-h-[48px] -ml-2",
+              "text-primary hover:text-primary/80",
+              "transition-colors duration-200",
+              "focus:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-lg",
+              "active:bg-secondary/50"
+            )}
+            aria-label={previousView ? `Back to ${viewLabels[previousView]}` : 'Go back'}
+          >
+            <ArrowLeft className="w-5 h-5" />
+            {previousView && (
+              <span className="text-sm font-medium hidden sm:inline">
+                {viewLabels[previousView]}
+              </span>
+            )}
+          </button>
+        ) : (
+          <div className="w-0 sm:w-0" />
+        )}
+
         <div className="min-w-0 flex-1">{getHeaderText()}</div>
         
         {/* Navigation arrows */}
@@ -140,10 +179,11 @@ export function CalendarHeader({
           <button
             onClick={onPrevious}
             className={cn(
-              "p-2 rounded-full tap-target flex items-center justify-center",
+              "p-2 rounded-full min-w-[48px] min-h-[48px] flex items-center justify-center",
               "text-muted-foreground hover:text-foreground hover:bg-secondary",
               "transition-colors duration-200",
-              "focus:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+              "focus:outline-none focus-visible:ring-2 focus-visible:ring-ring",
+              "active:bg-secondary/50"
             )}
             aria-label="Previous"
           >
@@ -153,10 +193,11 @@ export function CalendarHeader({
           <button
             onClick={onNext}
             className={cn(
-              "p-2 rounded-full tap-target flex items-center justify-center",
+              "p-2 rounded-full min-w-[48px] min-h-[48px] flex items-center justify-center",
               "text-muted-foreground hover:text-foreground hover:bg-secondary",
               "transition-colors duration-200",
-              "focus:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+              "focus:outline-none focus-visible:ring-2 focus-visible:ring-ring",
+              "active:bg-secondary/50"
             )}
             aria-label="Next"
           >

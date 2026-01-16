@@ -21,7 +21,8 @@ import {
   AlertCircle,
   Sun,
   Moon,
-  Monitor
+  Monitor,
+  X
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useSyncStatus } from '@/contexts/SyncContext';
@@ -56,12 +57,24 @@ export function SettingsSheet({ open, onOpenChange }: SettingsSheetProps) {
     <Sheet open={open} onOpenChange={onOpenChange}>
       <SheetContent side="bottom" className="h-[85vh] rounded-t-3xl flex flex-col">
         <SheetHeader className="text-left pb-4 flex-shrink-0">
-          <SheetTitle className="text-xl">
-            {mode === 'BS' ? 'सेटिङ्स' : 'Settings'}
-          </SheetTitle>
-          <SheetDescription>
-            {mode === 'BS' ? 'डाटा र गोपनीयता प्रबन्ध गर्नुहोस्' : 'Manage your data and privacy preferences'}
-          </SheetDescription>
+          <div className="flex items-center justify-between">
+            <div>
+              <SheetTitle className="text-xl">
+                {mode === 'BS' ? 'सेटिङ्स' : 'Settings'}
+              </SheetTitle>
+              <SheetDescription>
+                {mode === 'BS' ? 'डाटा र गोपनीयता प्रबन्ध गर्नुहोस्' : 'Manage your data and privacy preferences'}
+              </SheetDescription>
+            </div>
+            {/* Close button - 48x48 tap target */}
+            <button
+              onClick={() => onOpenChange(false)}
+              className="min-w-[48px] min-h-[48px] flex items-center justify-center text-muted-foreground hover:text-foreground active:bg-secondary/50 rounded-lg transition-colors"
+              aria-label="Close settings"
+            >
+              <X className="w-6 h-6" />
+            </button>
+          </div>
         </SheetHeader>
 
         <div className="flex-1 min-h-0 overflow-y-auto space-y-6 pb-12 -mx-6 px-6">

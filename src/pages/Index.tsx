@@ -1,5 +1,6 @@
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import { useCalendar } from '@/hooks/useCalendar';
+import { useNavigationHistory } from '@/hooks/useNavigationHistory';
 import { BottomNavigation } from '@/components/calendar/BottomNavigation';
 import { CalendarHeader } from '@/components/calendar/CalendarHeader';
 import { MonthGrid } from '@/components/calendar/MonthGrid';
@@ -12,7 +13,7 @@ import { AddEventSheet } from '@/components/calendar/AddEventSheet';
 import { EventDetailSheet } from '@/components/calendar/EventDetailSheet';
 import { SearchSheet } from '@/components/calendar/SearchSheet';
 import { SettingsSheet } from '@/components/calendar/SettingsSheet';
-import type { CalendarEvent } from '@/types/calendar';
+import type { CalendarEvent, ViewType } from '@/types/calendar';
 
 const Index = () => {
   const {
@@ -33,6 +34,8 @@ const Index = () => {
     deleteEvent,
   } = useCalendar();
 
+  const navigation = useNavigationHistory('month');
+
   const [showAddEvent, setShowAddEvent] = useState(false);
   const [showSearch, setShowSearch] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
@@ -43,10 +46,36 @@ const Index = () => {
     setShowAddEvent(true);
   };
 
-  const handleSelectMonth = (date: Date) => {
+  // Hierarchical navigation: Year → Month
+  const handleSelectMonth = useCallback((date: Date) => {
     selectDate(date);
+    navigation.navigateTo('month', view, date);
     setView('month');
-  };
+  }, [selectDate, navigation, view, setView]);
+
+  // Hierarchical navigation: Month/Week → Day
+  const handleSelectDay = useCallback((date: Date) => {
+    selectDate(date);
+    navigation.navigateTo('day', view, date);
+    setView('day');
+  }, [selectDate, navigation, view, setView]);
+
+  // Bottom navigation: resets the stack (lateral navigation)
+  const handleBottomNavChange = useCallback((newView: ViewType) => {
+    navigation.resetStack(newView);
+    setView(newView);
+  }, [navigation, setView]);
+
+  // Back button handler
+  const handleGoBack = useCallback(() => {
+    const previousState = navigation.goBack();
+    if (previousState) {
+      setView(previousState.view);
+      if (previousState.date) {
+        selectDate(previousState.date);
+      }
+    }
+  }, [navigation, setView, selectDate]);
 
   const handleEventClick = (event: CalendarEvent) => {
     setSelectedEvent(event);
@@ -60,7 +89,7 @@ const Index = () => {
 
   return (
     <div className="flex flex-col min-h-screen max-h-screen bg-background">
-      {/* Header */}
+      {/* Header with back navigation support */}
       <CalendarHeader
         currentDate={view === 'day' ? selectedDate : currentDate}
         view={view}
@@ -69,6 +98,9 @@ const Index = () => {
         onToday={goToToday}
         onSearchClick={() => setShowSearch(true)}
         onSettingsClick={() => setShowSettings(true)}
+        canGoBack={navigation.canGoBack}
+        onGoBack={handleGoBack}
+        previousView={navigation.getPreviousView()}
       />
 
       {/* Main content area */}
@@ -105,10 +137,7 @@ const Index = () => {
           <WeekView
             days={weekDays}
             selectedDate={selectedDate}
-            onSelectDate={(date) => {
-              selectDate(date);
-              setView('day');
-            }}
+            onSelectDate={handleSelectDay}
           />
         )}
 
@@ -127,8 +156,8 @@ const Index = () => {
         className={view === 'month' ? 'bottom-[148px]' : 'bottom-[88px]'}
       />
 
-      {/* Bottom Navigation */}
-      <BottomNavigation activeView={view} onViewChange={setView} />
+      {/* Bottom Navigation - uses lateral navigation (resets stack) */}
+      <BottomNavigation activeView={view} onViewChange={handleBottomNavChange} />
 
       {/* Add Event Sheet */}
       <AddEventSheet
