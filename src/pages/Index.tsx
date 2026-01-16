@@ -83,7 +83,7 @@ const Index = () => {
               onLongPress={handleLongPress}
               onEventClick={handleEventClick}
             />
-            <div className="flex-1 overflow-y-auto border-t border-border pb-20">
+            <div className="flex-1 overflow-y-auto border-t border-border pb-24">
               <EventList
                 date={selectedDate}
                 events={selectedDateEvents}

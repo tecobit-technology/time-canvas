@@ -70,7 +70,7 @@ export function MonthGrid({
   };
 
   return (
-    <div className="flex-1 px-2 pb-4 animate-fade-in">
+    <div className="flex-1 px-2 pb-20 animate-fade-in">
       {/* Week day headers */}
       <div className="grid grid-cols-7 mb-1">
         {weekDays.map((day, index) => (
