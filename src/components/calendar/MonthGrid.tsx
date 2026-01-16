@@ -72,13 +72,13 @@ export function MonthGrid({
     onLongPress?.(date);
   };
 
-  const baseRowHeight = isMobile ? 64 : 80;
-  const eventRowHeight = isMobile ? 16 : 20;
+  const baseRowHeight = isMobile ? 72 : 80;
+  const eventRowHeight = isMobile ? 22 : 20;
 
   const eventPillLayout = {
-    topOffset: isMobile ? 24 : 32,
+    topOffset: isMobile ? 28 : 32,
     rowHeight: eventRowHeight,
-    height: isMobile ? 20 : 18,
+    height: isMobile ? 18 : 18,
   };
 
   return (

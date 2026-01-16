@@ -42,7 +42,7 @@ export function EventPill({ position, cellWidth, onClick, layout }: EventPillPro
         onClick?.();
       }}
       className={cn(
-        "absolute flex items-center px-2 md:px-1.5 text-xs md:text-2xs font-medium truncate",
+        "absolute flex items-center px-1 text-[10px] font-semibold truncate leading-tight",
         "transition-all duration-150 hover:brightness-110 hover:shadow-sm",
         "focus:outline-none focus-visible:ring-2 focus-visible:ring-ring",
         colors.bg,
