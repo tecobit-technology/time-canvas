@@ -23,8 +23,8 @@ interface EventDetailSheetProps {
   event: CalendarEvent | null;
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  onUpdateEvent: (event: CalendarEvent) => void;
-  onDeleteEvent: (eventId: string) => void;
+  onUpdate: (id: string, updates: Partial<CalendarEvent>) => void;
+  onDelete: (id: string) => void;
 }
 
 const eventTypes: { type: EventType; label: string; color: string }[] = [
@@ -38,8 +38,8 @@ export function EventDetailSheet({
   event, 
   open, 
   onOpenChange, 
-  onUpdateEvent, 
-  onDeleteEvent 
+  onUpdate, 
+  onDelete 
 }: EventDetailSheetProps) {
   const [isEditing, setIsEditing] = useState(false);
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
@@ -72,8 +72,7 @@ export function EventDetailSheet({
   const handleSave = () => {
     if (!event || !title.trim()) return;
 
-    onUpdateEvent({
-      ...event,
+    onUpdate(event.id, {
       title: title.trim(),
       type: eventType,
       allDay,
@@ -87,7 +86,7 @@ export function EventDetailSheet({
 
   const handleDelete = () => {
     if (event) {
-      onDeleteEvent(event.id);
+      onDelete(event.id);
       setShowDeleteDialog(false);
       onOpenChange(false);
     }

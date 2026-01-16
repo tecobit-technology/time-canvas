@@ -3,7 +3,8 @@ export type EventType = 'personal' | 'holiday' | 'note' | 'meeting';
 export interface CalendarEvent {
   id: string;
   title: string;
-  date: Date;
+  date: Date;           // Start date (for single-day events, this is the only date)
+  endDate?: Date;       // End date (for multi-day events)
   startTime?: string;
   endTime?: string;
   allDay?: boolean;
@@ -20,4 +21,14 @@ export interface DateInfo {
   isWeekend: boolean;
   isCurrentMonth: boolean;
   events: CalendarEvent[];
+}
+
+// For rendering event pills in month view
+export interface EventPosition {
+  event: CalendarEvent;
+  startCol: number;     // Column index (0-6) where event starts in this week
+  endCol: number;       // Column index (0-6) where event ends in this week
+  isStart: boolean;     // Is this the start of the event?
+  isEnd: boolean;       // Is this the end of the event?
+  row: number;          // Vertical stacking position
 }

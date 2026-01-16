@@ -7,9 +7,10 @@ interface EventListProps {
   date: Date;
   events: CalendarEvent[];
   className?: string;
+  onEventClick?: (event: CalendarEvent) => void;
 }
 
-export function EventList({ date, events, className }: EventListProps) {
+export function EventList({ date, events, className, onEventClick }: EventListProps) {
   if (events.length === 0) {
     return (
       <div className={cn("px-4 py-8 text-center", className)}>
@@ -24,12 +25,16 @@ export function EventList({ date, events, className }: EventListProps) {
   }
 
   return (
-    <div className={cn("px-4 space-y-2", className)}>
+    <div className={cn("px-4 space-y-2 py-3", className)}>
       <h3 className="text-sm font-medium text-muted-foreground mb-3">
         {format(date, 'EEEE, MMMM d')}
       </h3>
       {events.map(event => (
-        <EventTile key={event.id} event={event} />
+        <EventTile 
+          key={event.id} 
+          event={event} 
+          onClick={() => onEventClick?.(event)}
+        />
       ))}
     </div>
   );

@@ -12,7 +12,6 @@ interface SearchSheetProps {
   onOpenChange: (open: boolean) => void;
   events: CalendarEvent[];
   onSelectEvent: (event: CalendarEvent) => void;
-  onSelectDate: (date: Date) => void;
 }
 
 export function SearchSheet({ 
@@ -20,7 +19,6 @@ export function SearchSheet({
   onOpenChange, 
   events,
   onSelectEvent,
-  onSelectDate,
 }: SearchSheetProps) {
   const [query, setQuery] = useState('');
 
@@ -54,7 +52,6 @@ export function SearchSheet({
   }, [query, events]);
 
   const handleSelectEvent = (event: CalendarEvent) => {
-    onSelectDate(event.date);
     onSelectEvent(event);
     onOpenChange(false);
     setQuery('');

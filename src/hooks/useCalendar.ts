@@ -8,7 +8,6 @@ import {
   isSameMonth, 
   isSameDay, 
   isWeekend,
-  format,
   addMonths,
   subMonths,
   addDays,
@@ -18,8 +17,9 @@ import {
   startOfDay
 } from 'date-fns';
 import type { CalendarEvent, DateInfo, ViewType } from '@/types/calendar';
+import { getEventsForDate } from '@/lib/eventUtils';
 
-// Sample events for demo
+// Sample events for demo - including multi-day events
 const sampleEvents: CalendarEvent[] = [
   {
     id: '1',
@@ -67,6 +67,31 @@ const sampleEvents: CalendarEvent[] = [
     allDay: true,
     type: 'note',
   },
+  // Multi-day events for demo
+  {
+    id: '7',
+    title: 'Team Offsite',
+    date: addDays(new Date(), 1), // Wednesday
+    endDate: addDays(new Date(), 3), // Friday
+    allDay: true,
+    type: 'meeting',
+  },
+  {
+    id: '8',
+    title: 'Conference Trip',
+    date: addDays(new Date(), 7),
+    endDate: addDays(new Date(), 10),
+    allDay: true,
+    type: 'personal',
+  },
+  {
+    id: '9',
+    title: 'Sprint Review',
+    date: addDays(new Date(), 4),
+    endDate: addDays(new Date(), 5),
+    allDay: true,
+    type: 'meeting',
+  },
 ];
 
 export function useCalendar() {
@@ -87,7 +112,7 @@ export function useCalendar() {
       isToday: isSameDay(date, today),
       isWeekend: isWeekend(date),
       isCurrentMonth: isSameMonth(date, currentDate),
-      events: events.filter(event => isSameDay(event.date, date)),
+      events: getEventsForDate(date, events),
     }));
   }, [currentDate, today, events]);
 
@@ -101,13 +126,13 @@ export function useCalendar() {
       isToday: isSameDay(date, today),
       isWeekend: isWeekend(date),
       isCurrentMonth: true,
-      events: events.filter(event => isSameDay(event.date, date)),
+      events: getEventsForDate(date, events),
     }));
   }, [currentDate, today, events]);
 
-  // Get events for selected date
+  // Get events for selected date (including multi-day events)
   const selectedDateEvents = useMemo(() => {
-    return events.filter(event => isSameDay(event.date, selectedDate));
+    return getEventsForDate(selectedDate, events);
   }, [selectedDate, events]);
 
   // Navigation functions
@@ -165,6 +190,16 @@ export function useCalendar() {
     setEvents(prev => [...prev, newEvent]);
   };
 
+  const updateEvent = (id: string, updates: Partial<CalendarEvent>) => {
+    setEvents(prev => prev.map(event => 
+      event.id === id ? { ...event, ...updates } : event
+    ));
+  };
+
+  const deleteEvent = (id: string) => {
+    setEvents(prev => prev.filter(event => event.id !== id));
+  };
+
   return {
     currentDate,
     selectedDate,
@@ -179,5 +214,7 @@ export function useCalendar() {
     goToNext,
     selectDate,
     addEvent,
+    updateEvent,
+    deleteEvent,
   };
 }
