@@ -95,9 +95,30 @@ const sampleEvents: CalendarEvent[] = [
 ];
 
 export function useCalendar() {
-  const [currentDate, setCurrentDate] = useState(new Date());
-  const [selectedDate, setSelectedDate] = useState(new Date());
-  const [view, setView] = useState<ViewType>('month');
+  const initialDate = useMemo(() => {
+    const params = new URLSearchParams(window.location.search);
+    const dateParam = params.get('date');
+    if (dateParam) {
+      const parsed = new Date(dateParam);
+      if (!Number.isNaN(parsed.getTime())) return parsed;
+    }
+    return new Date();
+  }, []);
+
+  const initialView = useMemo<ViewType>(() => {
+    const params = new URLSearchParams(window.location.search);
+    const viewParam = params.get('view') as ViewType | null;
+
+    if (viewParam === 'day' || viewParam === 'week' || viewParam === 'month' || viewParam === 'year') {
+      return viewParam;
+    }
+
+    return 'month';
+  }, []);
+
+  const [currentDate, setCurrentDate] = useState(initialDate);
+  const [selectedDate, setSelectedDate] = useState(initialDate);
+  const [view, setView] = useState<ViewType>(initialView);
   const [events, setEvents] = useState<CalendarEvent[]>(sampleEvents);
 
   const today = useMemo(() => startOfDay(new Date()), []);

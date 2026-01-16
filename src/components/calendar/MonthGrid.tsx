@@ -3,6 +3,7 @@ import { isSameDay, startOfWeek } from 'date-fns';
 import type { DateInfo, CalendarEvent } from '@/types/calendar';
 import { cn } from '@/lib/utils';
 import { useCalendarMode } from '@/contexts/CalendarModeContext';
+import { useIsMobile } from '@/hooks/use-mobile';
 import { adToBS, toNepaliNumeral, BS_WEEKDAYS_SHORT } from '@/lib/calendarAdapter';
 import { calculateEventPositions } from '@/lib/eventUtils';
 import { EventPill } from './EventPill';
@@ -28,6 +29,8 @@ export function MonthGrid({
   onEventClick 
 }: MonthGridProps) {
   const { mode } = useCalendarMode();
+  const isMobile = useIsMobile();
+  const maxVisibleEvents = isMobile ? 1 : MAX_VISIBLE_EVENTS;
   const gridRef = useRef<HTMLDivElement>(null);
   const [cellWidth, setCellWidth] = useState(0);
   
@@ -60,17 +63,20 @@ export function MonthGrid({
   const weekEventPositions = useMemo(() => {
     return weeks.map(week => {
       const weekDates = week.map(d => d.date);
-      return calculateEventPositions(weekDates, events, MAX_VISIBLE_EVENTS);
+      return calculateEventPositions(weekDates, events, maxVisibleEvents);
     });
-  }, [weeks, events]);
+  }, [weeks, events, maxVisibleEvents]);
 
   const handleContextMenu = (e: React.MouseEvent, date: Date) => {
     e.preventDefault();
     onLongPress?.(date);
   };
 
+  const baseRowHeight = isMobile ? 64 : 80;
+  const eventRowHeight = isMobile ? 16 : 20;
+
   return (
-    <div className="flex-1 px-2 pb-20 animate-fade-in">
+    <div className="flex-1 px-2 pb-40 md:pb-20 animate-fade-in">
       {/* Week day headers */}
       <div className="grid grid-cols-7 mb-1">
         {weekDays.map((day, index) => (
@@ -97,7 +103,7 @@ export function MonthGrid({
             <div 
               key={weekIndex} 
               className="relative grid grid-cols-7 gap-0.5"
-              style={{ minHeight: `${80 + MAX_VISIBLE_EVENTS * 20}px` }}
+              style={{ minHeight: `${baseRowHeight + maxVisibleEvents * eventRowHeight}px` }}
             >
               {/* Date cells */}
               {week.map((dayInfo, dayIndex) => {
