@@ -11,6 +11,7 @@ import { FAB } from '@/components/calendar/FAB';
 import { AddEventSheet } from '@/components/calendar/AddEventSheet';
 import { EventDetailSheet } from '@/components/calendar/EventDetailSheet';
 import { SearchSheet } from '@/components/calendar/SearchSheet';
+import { SettingsSheet } from '@/components/calendar/SettingsSheet';
 import type { CalendarEvent } from '@/types/calendar';
 
 const Index = () => {
@@ -34,6 +35,7 @@ const Index = () => {
 
   const [showAddEvent, setShowAddEvent] = useState(false);
   const [showSearch, setShowSearch] = useState(false);
+  const [showSettings, setShowSettings] = useState(false);
   const [selectedEvent, setSelectedEvent] = useState<CalendarEvent | null>(null);
 
   const handleLongPress = (date: Date) => {
@@ -66,6 +68,7 @@ const Index = () => {
         onNext={goToNext}
         onToday={goToToday}
         onSearchClick={() => setShowSearch(true)}
+        onSettingsClick={() => setShowSettings(true)}
       />
 
       {/* Main content area */}
@@ -147,6 +150,12 @@ const Index = () => {
         onOpenChange={setShowSearch}
         events={events}
         onSelectEvent={handleSearchSelect}
+      />
+
+      {/* Settings Sheet */}
+      <SettingsSheet
+        open={showSettings}
+        onOpenChange={setShowSettings}
       />
     </div>
   );
