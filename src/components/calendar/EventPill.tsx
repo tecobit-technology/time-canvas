@@ -5,6 +5,11 @@ interface EventPillProps {
   position: EventPosition;
   cellWidth: number;
   onClick?: () => void;
+  layout?: {
+    topOffset: number;
+    rowHeight: number;
+    height: number;
+  };
 }
 
 const typeColors: Record<string, { bg: string; text: string }> = {
@@ -14,15 +19,21 @@ const typeColors: Record<string, { bg: string; text: string }> = {
   meeting: { bg: 'bg-event-meeting', text: 'text-white' },
 };
 
-export function EventPill({ position, cellWidth, onClick }: EventPillProps) {
+export function EventPill({ position, cellWidth, onClick, layout }: EventPillProps) {
   const { event, startCol, endCol, isStart, isEnd, row } = position;
   const colors = typeColors[event.type] || typeColors.personal;
-  
+
+  const { topOffset, rowHeight, height } = layout ?? {
+    topOffset: 32,
+    rowHeight: 20,
+    height: 18,
+  };
+
   // Calculate width and position
   const spanCols = endCol - startCol + 1;
   const width = cellWidth * spanCols - 4; // 4px for margins
   const left = cellWidth * startCol + 2; // 2px left margin
-  const top = 32 + row * 20; // 32px for day number, 20px per event row
+  const top = topOffset + row * rowHeight;
   
   return (
     <button
@@ -31,7 +42,7 @@ export function EventPill({ position, cellWidth, onClick }: EventPillProps) {
         onClick?.();
       }}
       className={cn(
-        "absolute h-[18px] flex items-center px-1.5 text-2xs font-medium truncate",
+        "absolute flex items-center px-2 md:px-1.5 text-xs md:text-2xs font-medium truncate",
         "transition-all duration-150 hover:brightness-110 hover:shadow-sm",
         "focus:outline-none focus-visible:ring-2 focus-visible:ring-ring",
         colors.bg,
@@ -44,6 +55,7 @@ export function EventPill({ position, cellWidth, onClick }: EventPillProps) {
       )}
       style={{
         width: `${width}px`,
+        height: `${height}px`,
         left: `${left}px`,
         top: `${top}px`,
       }}

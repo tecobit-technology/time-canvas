@@ -1,5 +1,5 @@
 import { useMemo, useRef, useEffect, useState } from 'react';
-import { isSameDay, startOfWeek } from 'date-fns';
+import { isSameDay } from 'date-fns';
 import type { DateInfo, CalendarEvent } from '@/types/calendar';
 import { cn } from '@/lib/utils';
 import { useCalendarMode } from '@/contexts/CalendarModeContext';
@@ -30,7 +30,7 @@ export function MonthGrid({
 }: MonthGridProps) {
   const { mode } = useCalendarMode();
   const isMobile = useIsMobile();
-  const maxVisibleEvents = isMobile ? 1 : MAX_VISIBLE_EVENTS;
+  const maxVisibleEvents = isMobile ? 2 : MAX_VISIBLE_EVENTS;
   const gridRef = useRef<HTMLDivElement>(null);
   const [cellWidth, setCellWidth] = useState(0);
   
@@ -75,8 +75,14 @@ export function MonthGrid({
   const baseRowHeight = isMobile ? 64 : 80;
   const eventRowHeight = isMobile ? 16 : 20;
 
+  const eventPillLayout = {
+    topOffset: isMobile ? 24 : 32,
+    rowHeight: eventRowHeight,
+    height: isMobile ? 20 : 18,
+  };
+
   return (
-    <div className="flex-1 px-2 pb-40 md:pb-20 animate-fade-in">
+    <div className="flex-1 px-2 pb-36 md:pb-20 animate-fade-in">
       {/* Week day headers */}
       <div className="grid grid-cols-7 mb-1">
         {weekDays.map((day, index) => (
@@ -158,6 +164,7 @@ export function MonthGrid({
                   key={`${position.event.id}-${weekIndex}`}
                   position={position}
                   cellWidth={cellWidth}
+                  layout={eventPillLayout}
                   onClick={() => onEventClick?.(position.event)}
                 />
               ))}
