@@ -10,7 +10,7 @@ export function FAB({ onClick }: FABProps) {
     <button
       onClick={onClick}
       className={cn(
-        "fixed right-4 bottom-20 z-40",
+        "fixed right-4 bottom-[88px] z-40",
         "w-14 h-14 rounded-full",
         "bg-primary text-primary-foreground",
         "shadow-fab",

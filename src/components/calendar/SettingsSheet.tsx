@@ -50,8 +50,8 @@ export function SettingsSheet({ open, onOpenChange }: SettingsSheetProps) {
 
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
-      <SheetContent side="bottom" className="h-[85vh] rounded-t-3xl">
-        <SheetHeader className="text-left pb-4">
+      <SheetContent side="bottom" className="h-[85vh] rounded-t-3xl flex flex-col">
+        <SheetHeader className="text-left pb-4 flex-shrink-0">
           <SheetTitle className="text-xl">
             {mode === 'BS' ? 'सेटिङ्स' : 'Settings'}
           </SheetTitle>
@@ -60,7 +60,7 @@ export function SettingsSheet({ open, onOpenChange }: SettingsSheetProps) {
           </SheetDescription>
         </SheetHeader>
 
-        <div className="space-y-6 overflow-y-auto pb-8">
+        <div className="flex-1 overflow-y-auto space-y-6 pb-8 -mx-6 px-6">
           {/* Sync Status Card */}
           <div className="rounded-xl border border-border bg-card p-4 space-y-4">
             <div className="flex items-center justify-between">
