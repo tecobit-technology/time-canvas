@@ -4,6 +4,7 @@ import type { ViewType } from '@/types/calendar';
 import { cn } from '@/lib/utils';
 import { useCalendarMode } from '@/contexts/CalendarModeContext';
 import { CalendarModeSwitcher } from './CalendarModeSwitcher';
+import { SyncStatusIndicator } from './SyncStatusIndicator';
 import { 
   adToBS, 
   formatBSDate, 
@@ -18,6 +19,7 @@ interface CalendarHeaderProps {
   onNext: () => void;
   onToday: () => void;
   onSearchClick?: () => void;
+  onSettingsClick?: () => void;
 }
 
 export function CalendarHeader({
@@ -27,6 +29,7 @@ export function CalendarHeader({
   onNext,
   onToday,
   onSearchClick,
+  onSettingsClick,
 }: CalendarHeaderProps) {
   const { mode } = useCalendarMode();
   const bsDate = adToBS(currentDate);
@@ -131,6 +134,9 @@ export function CalendarHeader({
       <div className="flex-1 min-w-0">{getHeaderText()}</div>
       
       <div className="flex items-center gap-1.5 flex-shrink-0">
+        {/* Sync Status Indicator */}
+        <SyncStatusIndicator compact onClick={onSettingsClick} />
+        
         {/* Calendar Mode Switcher */}
         <CalendarModeSwitcher />
         
