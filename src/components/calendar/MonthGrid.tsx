@@ -30,7 +30,7 @@ export function MonthGrid({
 }: MonthGridProps) {
   const { mode } = useCalendarMode();
   const isMobile = useIsMobile();
-  const maxVisibleEvents = isMobile ? 2 : MAX_VISIBLE_EVENTS;
+  const maxVisibleEvents = isMobile ? 1 : MAX_VISIBLE_EVENTS;
   const gridRef = useRef<HTMLDivElement>(null);
   const [cellWidth, setCellWidth] = useState(0);
   
@@ -72,17 +72,17 @@ export function MonthGrid({
     onLongPress?.(date);
   };
 
-  const baseRowHeight = isMobile ? 72 : 80;
-  const eventRowHeight = isMobile ? 22 : 20;
+  const baseRowHeight = isMobile ? 60 : 80;
+  const eventRowHeight = isMobile ? 18 : 20;
 
   const eventPillLayout = {
-    topOffset: isMobile ? 28 : 32,
+    topOffset: isMobile ? 22 : 32,
     rowHeight: eventRowHeight,
-    height: isMobile ? 18 : 18,
+    height: isMobile ? 16 : 18,
   };
 
   return (
-    <div className="flex-1 px-2 pb-36 md:pb-20 animate-fade-in">
+    <div className="shrink-0 px-2 pb-4 animate-fade-in">
       {/* Week day headers */}
       <div className="grid grid-cols-7 mb-1">
         {weekDays.map((day, index) => (

@@ -83,7 +83,7 @@ const Index = () => {
               onLongPress={handleLongPress}
               onEventClick={handleEventClick}
             />
-            <div className="flex-1 overflow-y-auto border-t border-border pb-24">
+            <div className="flex-1 min-h-0 overflow-y-auto border-t border-border pb-24">
               <EventList
                 date={selectedDate}
                 events={selectedDateEvents}
@@ -122,7 +122,10 @@ const Index = () => {
       </main>
 
       {/* FAB */}
-      <FAB onClick={() => setShowAddEvent(true)} />
+      <FAB
+        onClick={() => setShowAddEvent(true)}
+        className={view === 'month' ? 'bottom-[148px]' : 'bottom-[88px]'}
+      />
 
       {/* Bottom Navigation */}
       <BottomNavigation activeView={view} onViewChange={setView} />

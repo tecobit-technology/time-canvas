@@ -3,14 +3,16 @@ import { cn } from '@/lib/utils';
 
 interface FABProps {
   onClick: () => void;
+  className?: string;
 }
 
-export function FAB({ onClick }: FABProps) {
+export function FAB({ onClick, className }: FABProps) {
   return (
     <button
       onClick={onClick}
       className={cn(
-        "fixed right-4 bottom-[88px] z-40",
+        "fixed right-4 z-40",
+        className ?? "bottom-[88px]",
         "w-14 h-14 rounded-full",
         "bg-primary text-primary-foreground",
         "shadow-fab",
