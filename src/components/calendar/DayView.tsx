@@ -1,8 +1,11 @@
 import { format, isSameDay } from 'date-fns';
+import { useMemo } from 'react';
 import { EventTile } from './EventTile';
+import { CulturalInsights } from './CulturalInsights';
 import type { CalendarEvent } from '@/types/calendar';
 import { cn } from '@/lib/utils';
 import { isMultiDayEvent, getEventDuration } from '@/lib/eventUtils';
+import { getCulturalMetadata } from '@/lib/culturalDataProvider';
 
 interface DayViewProps {
   date: Date;
@@ -13,6 +16,9 @@ interface DayViewProps {
 const hours = Array.from({ length: 24 }, (_, i) => i);
 
 export function DayView({ date, events, onEventClick }: DayViewProps) {
+  // Get cultural metadata for the selected date
+  const culturalMetadata = useMemo(() => getCulturalMetadata(date), [date]);
+
   // Separate all-day and multi-day events from timed events
   const allDayEvents = events.filter(e => e.allDay || isMultiDayEvent(e));
   const timedEvents = events.filter(e => !e.allDay && !isMultiDayEvent(e));
@@ -43,6 +49,9 @@ export function DayView({ date, events, onEventClick }: DayViewProps) {
 
   return (
     <div className="flex-1 overflow-y-auto scrollbar-hide animate-fade-in pb-20">
+      {/* Cultural Insights Section */}
+      <CulturalInsights metadata={culturalMetadata} />
+
       {/* All-day / Multi-day events section */}
       {allDayEvents.length > 0 && (
         <div className="px-4 py-3 border-b border-border bg-secondary/30">
