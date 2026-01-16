@@ -61,18 +61,20 @@ export function AddEventSheet({ open, onOpenChange, selectedDate, onAddEvent }: 
       <SheetContent side="bottom" className="h-[85vh] rounded-t-3xl px-4 pb-safe-bottom">
         <SheetHeader className="mb-6">
           <div className="flex items-center justify-between">
+            {/* Close button - 48x48 tap target */}
             <button
               onClick={() => onOpenChange(false)}
-              className="p-2 -ml-2 text-muted-foreground hover:text-foreground"
+              className="min-w-[48px] min-h-[48px] -ml-2 flex items-center justify-center text-muted-foreground hover:text-foreground active:bg-secondary/50 rounded-lg transition-colors"
+              aria-label="Close"
             >
-              <X className="w-5 h-5" />
+              <X className="w-6 h-6" />
             </button>
             <SheetTitle className="text-lg font-semibold">New Event</SheetTitle>
             <Button
               onClick={handleSave}
               disabled={!title.trim()}
               size="sm"
-              className="rounded-full px-5"
+              className="rounded-full px-5 min-h-[44px]"
             >
               Save
             </Button>

@@ -107,11 +107,13 @@ export function EventDetailSheet({
         <SheetContent side="bottom" className="h-[75vh] rounded-t-3xl px-4 pb-safe-bottom">
           <SheetHeader className="mb-6">
             <div className="flex items-center justify-between">
+              {/* Close button - 48x48 tap target */}
               <button
                 onClick={handleClose}
-                className="p-2 -ml-2 text-muted-foreground hover:text-foreground"
+                className="min-w-[48px] min-h-[48px] -ml-2 flex items-center justify-center text-muted-foreground hover:text-foreground active:bg-secondary/50 rounded-lg transition-colors"
+                aria-label="Close"
               >
-                <X className="w-5 h-5" />
+                <X className="w-6 h-6" />
               </button>
               <SheetTitle className="text-lg font-semibold">
                 {isEditing ? 'Edit Event' : 'Event Details'}
@@ -121,21 +123,25 @@ export function EventDetailSheet({
                   onClick={handleSave}
                   disabled={!title.trim()}
                   size="sm"
-                  className="rounded-full px-5"
+                  className="rounded-full px-5 min-h-[44px]"
                 >
                   Save
                 </Button>
               ) : (
-                <div className="flex gap-2">
+                <div className="flex gap-1">
+                  {/* Edit button - 48x48 tap target */}
                   <button
                     onClick={handleEdit}
-                    className="p-2 text-muted-foreground hover:text-foreground"
+                    className="min-w-[48px] min-h-[48px] flex items-center justify-center text-muted-foreground hover:text-foreground active:bg-secondary/50 rounded-lg transition-colors"
+                    aria-label="Edit event"
                   >
                     <Edit3 className="w-5 h-5" />
                   </button>
+                  {/* Delete button - 48x48 tap target */}
                   <button
                     onClick={() => setShowDeleteDialog(true)}
-                    className="p-2 text-destructive hover:text-destructive/80"
+                    className="min-w-[48px] min-h-[48px] flex items-center justify-center text-destructive hover:text-destructive/80 active:bg-destructive/10 rounded-lg transition-colors"
+                    aria-label="Delete event"
                   >
                     <Trash2 className="w-5 h-5" />
                   </button>

@@ -83,11 +83,13 @@ export function SearchSheet({
       <SheetContent side="top" className="h-[85vh] rounded-b-3xl px-4">
         <SheetHeader className="mb-4">
           <div className="flex items-center gap-3">
+            {/* Close button - 48x48 tap target */}
             <button
               onClick={handleClose}
-              className="p-2 -ml-2 text-muted-foreground hover:text-foreground"
+              className="min-w-[48px] min-h-[48px] -ml-2 flex items-center justify-center text-muted-foreground hover:text-foreground active:bg-secondary/50 rounded-lg transition-colors"
+              aria-label="Close search"
             >
-              <X className="w-5 h-5" />
+              <X className="w-6 h-6" />
             </button>
             <SheetTitle className="sr-only">Search Events</SheetTitle>
             <div className="flex-1 relative">
