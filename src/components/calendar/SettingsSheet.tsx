@@ -60,7 +60,7 @@ export function SettingsSheet({ open, onOpenChange }: SettingsSheetProps) {
           </SheetDescription>
         </SheetHeader>
 
-        <div className="flex-1 overflow-y-auto space-y-6 pb-8 -mx-6 px-6">
+        <div className="flex-1 min-h-0 overflow-y-auto space-y-6 pb-12 -mx-6 px-6">
           {/* Sync Status Card */}
           <div className="rounded-xl border border-border bg-card p-4 space-y-4">
             <div className="flex items-center justify-between">
