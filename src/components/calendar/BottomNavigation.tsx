@@ -16,7 +16,10 @@ const navItems: { view: ViewType; label: string; icon: typeof Calendar }[] = [
 
 export function BottomNavigation({ activeView, onViewChange }: BottomNavigationProps) {
   return (
-    <nav className="fixed bottom-0 left-0 right-0 z-50 bg-nav shadow-nav safe-bottom">
+    <nav 
+      className="fixed bottom-0 left-0 right-0 z-50 bg-nav shadow-nav"
+      style={{ paddingBottom: 'env(safe-area-inset-bottom, 0px)' }}
+    >
       <div className="flex items-center justify-around h-16 max-w-lg mx-auto">
         {navItems.map(({ view, label, icon: Icon }) => {
           const isActive = activeView === view;
@@ -25,10 +28,14 @@ export function BottomNavigation({ activeView, onViewChange }: BottomNavigationP
               key={view}
               onClick={() => onViewChange(view)}
               className={cn(
-                "flex flex-col items-center justify-center flex-1 h-full tap-target",
+                "flex flex-col items-center justify-center flex-1 h-full",
+                "min-w-[64px] min-h-[48px]", // Ensure 48dp tap target
                 "transition-colors duration-200",
-                "focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                "focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
+                "active:bg-secondary/50" // Touch feedback
               )}
+              aria-label={`Switch to ${label} view`}
+              aria-pressed={isActive}
             >
               <Icon
                 className={cn(

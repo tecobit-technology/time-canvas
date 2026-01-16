@@ -72,51 +72,60 @@
   }
 
   .dark {
-    --background: 220 20% 10%;
-    --foreground: 220 14% 96%;
+    /* High-contrast dark mode with WCAG AA compliant coral */
+    --background: 220 20% 8%;
+    --foreground: 0 0% 98%;
     
-    --card: 220 18% 14%;
-    --card-foreground: 220 14% 96%;
+    --card: 220 18% 12%;
+    --card-foreground: 0 0% 98%;
     
-    --popover: 220 18% 14%;
-    --popover-foreground: 220 14% 96%;
+    --popover: 220 18% 12%;
+    --popover-foreground: 0 0% 98%;
     
-    --primary: 12 76% 61%;
-    --primary-foreground: 0 0% 100%;
+    /* Coral adjusted for dark mode - WCAG AA compliant (4.5:1 contrast) */
+    --primary: 12 85% 65%;
+    --primary-foreground: 220 20% 8%;
     
-    --secondary: 220 18% 18%;
-    --secondary-foreground: 220 14% 90%;
+    --secondary: 220 18% 16%;
+    --secondary-foreground: 0 0% 92%;
     
-    --muted: 220 18% 18%;
-    --muted-foreground: 220 10% 60%;
+    --muted: 220 18% 16%;
+    --muted-foreground: 220 10% 65%;
     
-    --accent: 12 50% 20%;
-    --accent-foreground: 12 76% 70%;
+    --accent: 12 60% 18%;
+    --accent-foreground: 12 85% 75%;
     
-    --destructive: 0 62% 50%;
+    --destructive: 0 72% 55%;
     --destructive-foreground: 0 0% 100%;
     
-    --border: 220 18% 22%;
-    --input: 220 18% 22%;
-    --ring: 12 76% 61%;
+    --border: 220 18% 20%;
+    --input: 220 18% 20%;
+    --ring: 12 85% 65%;
     
-    --calendar-today: 12 76% 61%;
-    --calendar-today-foreground: 0 0% 100%;
-    --calendar-weekend: 220 18% 16%;
-    --calendar-weekend-foreground: 220 10% 60%;
+    /* Calendar tokens for dark mode */
+    --calendar-today: 12 85% 65%;
+    --calendar-today-foreground: 220 20% 8%;
+    --calendar-weekend: 220 18% 14%;
+    --calendar-weekend-foreground: 220 10% 65%;
     
-    --nav-background: 220 18% 12%;
-    --nav-foreground: 220 10% 60%;
-    --nav-active: 12 76% 61%;
+    /* Event colors adjusted for dark mode visibility */
+    --event-personal: 217 91% 65%;
+    --event-holiday: 0 80% 60%;
+    --event-note: 142 71% 50%;
+    --event-meeting: 262 83% 68%;
     
-    --sidebar-background: 220 20% 10%;
-    --sidebar-foreground: 220 14% 96%;
-    --sidebar-primary: 12 76% 61%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 12 50% 20%;
-    --sidebar-accent-foreground: 12 76% 70%;
-    --sidebar-border: 220 18% 22%;
-    --sidebar-ring: 12 76% 61%;
+    --nav-background: 220 18% 10%;
+    --nav-foreground: 220 10% 65%;
+    --nav-active: 12 85% 65%;
+    
+    --sidebar-background: 220 20% 8%;
+    --sidebar-foreground: 0 0% 98%;
+    --sidebar-primary: 12 85% 65%;
+    --sidebar-primary-foreground: 220 20% 8%;
+    --sidebar-accent: 12 60% 18%;
+    --sidebar-accent-foreground: 12 85% 75%;
+    --sidebar-border: 220 18% 20%;
+    --sidebar-ring: 12 85% 65%;
   }
 }
 

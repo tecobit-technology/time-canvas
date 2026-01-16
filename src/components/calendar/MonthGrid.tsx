@@ -128,13 +128,17 @@ export function MonthGrid({
                     onContextMenu={(e) => handleContextMenu(e, date)}
                     className={cn(
                       "relative flex flex-col items-center pt-1",
+                      "min-h-[48px] min-w-[44px]", // 48dp tap target
                       "transition-colors duration-200",
                       "focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-inset",
                       "rounded-lg",
+                      "active:bg-secondary/50", // Touch feedback
                       !isCurrentMonth && "opacity-40",
                       isWeekend && isCurrentMonth && "bg-calendar-weekend/50",
                       isSelected && !isToday && "bg-accent",
                     )}
+                    aria-label={`${date.toLocaleDateString()}`}
+                    aria-pressed={isSelected}
                   >
                     <span
                       className={cn(

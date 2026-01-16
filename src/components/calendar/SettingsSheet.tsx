@@ -9,7 +9,6 @@ import {
 import { Button } from '@/components/ui/button';
 import { Switch } from '@/components/ui/switch';
 import { Badge } from '@/components/ui/badge';
-import { Separator } from '@/components/ui/separator';
 import { 
   Cloud, 
   CloudOff, 
@@ -19,11 +18,15 @@ import {
   Lock,
   Smartphone,
   CheckCircle2,
-  AlertCircle
+  AlertCircle,
+  Sun,
+  Moon,
+  Monitor
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useSyncStatus } from '@/contexts/SyncContext';
 import { useCalendarMode } from '@/contexts/CalendarModeContext';
+import { useTheme } from 'next-themes';
 
 interface SettingsSheetProps {
   open: boolean;
@@ -40,6 +43,7 @@ export function SettingsSheet({ open, onOpenChange }: SettingsSheetProps) {
     getLastSyncedText 
   } = useSyncStatus();
   const { mode } = useCalendarMode();
+  const { theme, setTheme } = useTheme();
   const [isSyncing, setIsSyncing] = useState(false);
 
   const handleSync = async () => {
@@ -102,6 +106,68 @@ export function SettingsSheet({ open, onOpenChange }: SettingsSheetProps) {
                 {isSyncing ? 'Syncing...' : 'Sync Now'}
               </Button>
             )}
+          </div>
+
+          {/* Appearance Section */}
+          <div className="space-y-3">
+            <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wide">
+              {mode === 'BS' ? 'प्रदर्शन' : 'Appearance'}
+            </h3>
+
+            <div className="rounded-xl border border-border bg-card p-4">
+              <div className="flex items-start gap-3">
+                <div className="p-2 rounded-full bg-primary/10 mt-0.5">
+                  {theme === 'dark' ? (
+                    <Moon className="w-4 h-4 text-primary" />
+                  ) : theme === 'light' ? (
+                    <Sun className="w-4 h-4 text-primary" />
+                  ) : (
+                    <Monitor className="w-4 h-4 text-primary" />
+                  )}
+                </div>
+                <div className="flex-1">
+                  <h4 className="font-medium mb-3">Theme</h4>
+                  <div className="grid grid-cols-3 gap-2">
+                    <button
+                      onClick={() => setTheme('light')}
+                      className={cn(
+                        "flex flex-col items-center gap-1.5 p-3 rounded-lg border-2 transition-colors min-h-[48px]",
+                        theme === 'light' 
+                          ? "border-primary bg-primary/5" 
+                          : "border-border hover:border-primary/50"
+                      )}
+                    >
+                      <Sun className="w-5 h-5" />
+                      <span className="text-xs font-medium">Light</span>
+                    </button>
+                    <button
+                      onClick={() => setTheme('dark')}
+                      className={cn(
+                        "flex flex-col items-center gap-1.5 p-3 rounded-lg border-2 transition-colors min-h-[48px]",
+                        theme === 'dark' 
+                          ? "border-primary bg-primary/5" 
+                          : "border-border hover:border-primary/50"
+                      )}
+                    >
+                      <Moon className="w-5 h-5" />
+                      <span className="text-xs font-medium">Dark</span>
+                    </button>
+                    <button
+                      onClick={() => setTheme('system')}
+                      className={cn(
+                        "flex flex-col items-center gap-1.5 p-3 rounded-lg border-2 transition-colors min-h-[48px]",
+                        theme === 'system' 
+                          ? "border-primary bg-primary/5" 
+                          : "border-border hover:border-primary/50"
+                      )}
+                    >
+                      <Monitor className="w-5 h-5" />
+                      <span className="text-xs font-medium">System</span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
 
           {/* Data & Privacy Section */}
