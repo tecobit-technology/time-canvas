@@ -1,5 +1,7 @@
 import type { DateInfo } from '@/types/calendar';
 import { cn } from '@/lib/utils';
+import { useCalendarMode } from '@/contexts/CalendarModeContext';
+import { adToBS, toNepaliNumeral } from '@/lib/calendarAdapter';
 
 interface DateCellProps {
   dateInfo: DateInfo;
@@ -10,9 +12,15 @@ interface DateCellProps {
 
 export function DateCell({ dateInfo, isSelected, onClick, onLongPress }: DateCellProps) {
   const { date, isToday, isWeekend, isCurrentMonth, events } = dateInfo;
+  const { mode } = useCalendarMode();
   
   // Get unique event types for dots
   const eventTypes = [...new Set(events.map(e => e.type))];
+  
+  // Get the display day number
+  const displayDay = mode === 'BS' 
+    ? toNepaliNumeral(adToBS(date).day)
+    : date.getDate();
   
   const handleContextMenu = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -42,7 +50,7 @@ export function DateCell({ dateInfo, isSelected, onClick, onLongPress }: DateCel
           isSelected && !isToday && "text-accent-foreground font-semibold"
         )}
       >
-        {date.getDate()}
+        {displayDay}
       </span>
       
       {/* Event indicator dots */}

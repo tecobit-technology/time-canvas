@@ -1,7 +1,15 @@
-import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Search } from 'lucide-react';
 import { format } from 'date-fns';
 import type { ViewType } from '@/types/calendar';
 import { cn } from '@/lib/utils';
+import { useCalendarMode } from '@/contexts/CalendarModeContext';
+import { CalendarModeSwitcher } from './CalendarModeSwitcher';
+import { 
+  adToBS, 
+  formatBSDate, 
+  BS_MONTHS, 
+  getGregorianEquivalent 
+} from '@/lib/calendarAdapter';
 
 interface CalendarHeaderProps {
   currentDate: Date;
@@ -9,6 +17,7 @@ interface CalendarHeaderProps {
   onPrevious: () => void;
   onNext: () => void;
   onToday: () => void;
+  onSearchClick?: () => void;
 }
 
 export function CalendarHeader({
@@ -17,8 +26,63 @@ export function CalendarHeader({
   onPrevious,
   onNext,
   onToday,
+  onSearchClick,
 }: CalendarHeaderProps) {
+  const { mode } = useCalendarMode();
+  const bsDate = adToBS(currentDate);
+
   const getHeaderText = () => {
+    if (mode === 'BS') {
+      // Bikram Sambat mode
+      switch (view) {
+        case 'day':
+          return (
+            <div className="flex flex-col">
+              <span className="text-2xl font-bold tracking-tight">
+                {BS_MONTHS[bsDate.month]} {bsDate.day}
+              </span>
+              <span className="text-sm text-muted-foreground">
+                {bsDate.year} BS • {format(currentDate, 'MMM d, yyyy')}
+              </span>
+            </div>
+          );
+        case 'week':
+          return (
+            <div className="flex flex-col">
+              <span className="text-2xl font-bold tracking-tight">
+                {BS_MONTHS[bsDate.month]} {bsDate.year}
+              </span>
+              <span className="text-sm text-muted-foreground">
+                {getGregorianEquivalent(currentDate)}
+              </span>
+            </div>
+          );
+        case 'month':
+          return (
+            <div className="flex flex-col">
+              <span className="text-2xl font-bold tracking-tight">
+                {BS_MONTHS[bsDate.month]}
+              </span>
+              <span className="text-sm text-muted-foreground">
+                {bsDate.year} BS • {getGregorianEquivalent(currentDate)}
+              </span>
+            </div>
+          );
+        case 'year':
+          return (
+            <div className="flex flex-col">
+              <span className="text-2xl font-bold tracking-tight">
+                {bsDate.year} BS
+              </span>
+              <span className="text-sm text-muted-foreground">
+                {format(currentDate, 'yyyy')} AD
+              </span>
+            </div>
+          );
+      }
+    }
+
+    // Gregorian (AD) mode - original behavior
     switch (view) {
       case 'day':
         return (
@@ -63,10 +127,29 @@ export function CalendarHeader({
   };
 
   return (
-    <header className="flex items-center justify-between px-4 py-4 bg-background safe-top">
-      <div className="flex-1">{getHeaderText()}</div>
+    <header className="flex items-center justify-between px-4 py-3 bg-background safe-top">
+      <div className="flex-1 min-w-0">{getHeaderText()}</div>
       
-      <div className="flex items-center gap-1">
+      <div className="flex items-center gap-1.5 flex-shrink-0">
+        {/* Calendar Mode Switcher */}
+        <CalendarModeSwitcher />
+        
+        {/* Search button */}
+        {onSearchClick && (
+          <button
+            onClick={onSearchClick}
+            className={cn(
+              "p-2 rounded-full tap-target flex items-center justify-center",
+              "text-muted-foreground hover:text-foreground hover:bg-secondary",
+              "transition-colors duration-200",
+              "focus:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+            )}
+            aria-label="Search events"
+          >
+            <Search className="w-5 h-5" />
+          </button>
+        )}
+        
         <button
           onClick={onToday}
           className={cn(
@@ -77,7 +160,7 @@ export function CalendarHeader({
             "focus:outline-none focus-visible:ring-2 focus-visible:ring-ring"
           )}
         >
-          Today
+          {mode === 'BS' ? 'आज' : 'Today'}
         </button>
         
         <button
