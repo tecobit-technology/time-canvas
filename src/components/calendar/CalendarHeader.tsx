@@ -130,70 +130,79 @@ export function CalendarHeader({
   };
 
   return (
-    <header className="flex items-center justify-between px-4 py-3 bg-background safe-top">
-      <div className="flex-1 min-w-0">{getHeaderText()}</div>
-      
-      <div className="flex items-center gap-1.5 flex-shrink-0">
-        {/* Sync Status Indicator */}
-        <SyncStatusIndicator compact onClick={onSettingsClick} />
+    <header className="flex flex-col px-4 py-3 bg-background safe-top gap-2">
+      {/* Top row: Title and primary actions */}
+      <div className="flex items-center justify-between">
+        <div className="min-w-0 flex-1">{getHeaderText()}</div>
         
-        {/* Calendar Mode Switcher */}
-        <CalendarModeSwitcher />
-        
-        {/* Search button */}
-        {onSearchClick && (
+        {/* Navigation arrows */}
+        <div className="flex items-center gap-0.5">
           <button
-            onClick={onSearchClick}
+            onClick={onPrevious}
             className={cn(
               "p-2 rounded-full tap-target flex items-center justify-center",
               "text-muted-foreground hover:text-foreground hover:bg-secondary",
               "transition-colors duration-200",
               "focus:outline-none focus-visible:ring-2 focus-visible:ring-ring"
             )}
-            aria-label="Search events"
+            aria-label="Previous"
           >
-            <Search className="w-5 h-5" />
+            <ChevronLeft className="w-5 h-5" />
           </button>
-        )}
+          
+          <button
+            onClick={onNext}
+            className={cn(
+              "p-2 rounded-full tap-target flex items-center justify-center",
+              "text-muted-foreground hover:text-foreground hover:bg-secondary",
+              "transition-colors duration-200",
+              "focus:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+            )}
+            aria-label="Next"
+          >
+            <ChevronRight className="w-5 h-5" />
+          </button>
+        </div>
+      </div>
+      
+      {/* Bottom row: Mode switchers and tools */}
+      <div className="flex items-center justify-between">
+        {/* Left side: Calendar mode and sync status */}
+        <div className="flex items-center gap-2">
+          <CalendarModeSwitcher />
+          <SyncStatusIndicator compact onClick={onSettingsClick} />
+        </div>
         
-        <button
-          onClick={onToday}
-          className={cn(
-            "px-3 py-1.5 text-sm font-medium rounded-full",
-            "bg-accent text-accent-foreground",
-            "transition-colors duration-200",
-            "hover:bg-primary hover:text-primary-foreground",
-            "focus:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+        {/* Right side: Today button and search */}
+        <div className="flex items-center gap-1.5">
+          <button
+            onClick={onToday}
+            className={cn(
+              "px-3 py-1.5 text-sm font-medium rounded-full",
+              "bg-accent text-accent-foreground",
+              "transition-colors duration-200",
+              "hover:bg-primary hover:text-primary-foreground",
+              "focus:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+            )}
+          >
+            {mode === 'BS' ? 'आज' : 'Today'}
+          </button>
+          
+          {onSearchClick && (
+            <button
+              onClick={onSearchClick}
+              className={cn(
+                "p-2 rounded-full tap-target flex items-center justify-center",
+                "text-muted-foreground hover:text-foreground hover:bg-secondary",
+                "transition-colors duration-200",
+                "focus:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+              )}
+              aria-label="Search events"
+            >
+              <Search className="w-5 h-5" />
+            </button>
           )}
-        >
-          {mode === 'BS' ? 'आज' : 'Today'}
-        </button>
-        
-        <button
-          onClick={onPrevious}
-          className={cn(
-            "p-2 rounded-full tap-target flex items-center justify-center",
-            "text-muted-foreground hover:text-foreground hover:bg-secondary",
-            "transition-colors duration-200",
-            "focus:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-          )}
-          aria-label="Previous"
-        >
-          <ChevronLeft className="w-5 h-5" />
-        </button>
-        
-        <button
-          onClick={onNext}
-          className={cn(
-            "p-2 rounded-full tap-target flex items-center justify-center",
-            "text-muted-foreground hover:text-foreground hover:bg-secondary",
-            "transition-colors duration-200",
-            "focus:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-          )}
-          aria-label="Next"
-        >
-          <ChevronRight className="w-5 h-5" />
-        </button>
+        </div>
       </div>
     </header>
   );
